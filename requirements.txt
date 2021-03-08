@@ -1,5 +1,2 @@
-json
-os
-sys
-pandas
-sklearn
+bs4
+textblob
