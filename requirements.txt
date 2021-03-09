@@ -1,5 +1,4 @@
-json
-os
-sys
+bs4
+textblob
 pandas
 sklearn
