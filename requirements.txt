@@ -1,5 +1,4 @@
 bs4
 textblob
 pandas
-spacy
 sklearn
