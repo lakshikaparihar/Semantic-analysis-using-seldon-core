@@ -1,5 +1,6 @@
 import pickle
 import utils
+import json
 
 class IMDb(object):
     def __init__(self):
@@ -15,4 +16,13 @@ class IMDb(object):
         predictions = self.loaded_model.predict(tfidf_features)
         predict_prob =self.loaded_model._predict_proba_lr(tfidf_features)
         print("Predicting result .......................")
-        return predictions , predict_prob
+        predict = {}
+        predict.update({"Sample":X[0]})
+        predict.update({"Feedback value":predictions[0]})
+        if predictions[0] == "pos":
+            predict.update({"Probability":predict_prob[0][1]})
+        else :
+            predict.update({"Probability":predict_prob[0][0]})
+        print(predict)
+        json_object = json.dumps(predict, indent = 4)
+        return json.dumps(json_object)
