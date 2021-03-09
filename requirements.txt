@@ -1,4 +1,5 @@
 spacy==2.3.2
+en_core_web_sm
 bs4
 textblob
 pandas
