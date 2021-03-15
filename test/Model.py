@@ -3,16 +3,21 @@ from bs4 import BeautifulSoup
 import nltk
 from nltk import WordNetLemmatizer
 import unicodedata
-from sklearn.base import BaseEstimator, TransformerMixin
+from sklearn.feature_extraction.text import CountVectorizer
 import pandas as pd
 import json
 import joblib
 
-class TextNormalizer(BaseEstimator, TransformerMixin):
+
+class Model(object):
 
     def __init__(self, language='english'):
+        print("Initializing model.............................................................")
         self.stopwords  = set(nltk.corpus.stopwords.words(language))
         self.lemmatizer = WordNetLemmatizer()
+        self.model = joblib.load("model.joblib")
+        print("Model load ho gya h.......................................................")
+
 
     def get_wordcounts(self,x):
 	    self.length = len(str(x).split())
@@ -158,10 +163,7 @@ class TextNormalizer(BaseEstimator, TransformerMixin):
 
     	return self.ngram
 
-    def fit(self, X, y=None):
-        return self
-
-    def transform(self,x):
+    def get_clean(self,x):
         x = str(x).lower().replace('\\','').replace('_',' ')
         x = self._cont_exp(x)
         x = self.remove_emails(x)
@@ -172,32 +174,10 @@ class TextNormalizer(BaseEstimator, TransformerMixin):
         x = self.remove_special_chars(x)
         x = re.sub("(.)\\1{2,}", "\\1", x)
         return x
- 
 
-from sklearn.preprocessing import FunctionTransformer
-
-class Model(object):
-    def __init__(self):
-        print("Initializing class .......")
-        func = FunctionTransformer(transformer)
-        self.model = joblib.load("model.joblib")
-        print("Loading model..........")
-        
-	def transformer(X):
-    	X = pd.Series(X)
-    	print("Starting.....................................................................")
-    	X=X.apply(lambda x:TextNormalizer().transform(x))
-    	print("Data Cleaning...........................................................")
-    	return X
-        
     def predict(self,X,feature_name):
-        return self.model.predict(X)
+        clean_text = self.get_clean(X)
+        print("Data Cleaned .............")
 
-'''
-import joblib
-# joblib.dump(model,"model.joblib")
+        return self.model.predict([clean_text])
 
-model = joblib.load("model.joblib")
-sample = "I Love the movie , SRK's acting was great"
-print(model.predict(sample))
-'''
