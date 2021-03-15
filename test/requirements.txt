@@ -1,0 +1,7 @@
+re
+bs4
+nltk
+unicodedata
+sklearn
+pandas
+json
