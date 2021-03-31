@@ -8,19 +8,29 @@ from sklearn.model_selection import train_test_split
 from sklearn.svm import LinearSVC
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.pipeline import Pipeline
+from sklearn.preprocessing import FunctionTransformer
+from TextNormalizer import TextNormalizer
 
 class movie():
+
+    def transformer(self,X):
+        #X = pd.Series(X)
+        print("Starting.....................................................................")
+        X=X.apply(lambda x:TextNormalizer().transform(x))
+        print("Data Cleaning...........................................................")
+        return X
     def mlflow_run(self,params,register=False,verbose=False):
        with mlflow.start_run() as run:
           print("mlflow running............")
           mlflow.log_params(params)
   
           df = pd.read_excel("train.xlsx")
-          df["Reviews"]=df["Reviews"].apply(lambda x:utils.get_clean(x))
+          #df["Reviews"]=df["Reviews"].apply(lambda x:utils.get_clean(x))
   
           X = df["Reviews"]
           y = df["Sentiment"]
-  
+    
+          func = FunctionTransformer(self.transformer)
           #tfidf = TfidfVectorizer(max_features=5000)
           #X = tfidf.fit_transform(X)
           
@@ -35,6 +45,7 @@ class movie():
   
           print("model initializing..................")
           model = Pipeline([
+             ('vectorizer',func),
              ('tfidf',TfidfVectorizer()),
              ('trainer',LinearSVC(**params))])
 
@@ -43,7 +54,7 @@ class movie():
           model.fit(x_train,y_train)
   
           y_pred = model.predict(x_test)
-  
+          print(y_pred)
           # Compute metrics
           #mse = mean_squared_error(y_pred, y_test)
           #rsme = np.sqrt(mse)
