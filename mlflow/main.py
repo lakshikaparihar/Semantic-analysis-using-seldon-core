@@ -2,7 +2,6 @@ import mlflow.sklearn
 import numpy as np
 from sklearn.metrics import mean_squared_error
 import pandas as pd
-import utils
 import spacy
 from sklearn.model_selection import train_test_split
 from sklearn.svm import LinearSVC
