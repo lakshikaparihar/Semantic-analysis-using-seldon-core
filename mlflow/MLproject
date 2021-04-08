@@ -1,0 +1,8 @@
+name: bruh
+
+docker_env:
+    image:  burrah
+
+entry_points:
+  main:
+    command: "python3 main.py"
