@@ -81,7 +81,7 @@ class movie():
 
 if __name__ == "__main__":
    # Use sqlite:///mlruns.db as the local store for tracking and registery
-   mlflow.set_tracking_uri("sqlite:///mlruns.db")
+   mlflow.set_tracking_uri("mysql+pymysql://nishkarsh:nishkarsh@nishkarsh.cmuzdwd6qin5.ap-south-1.rds.amazonaws.com:3306/nishkarsh")
 
    # Train, fit and register our model
    params_list = [
